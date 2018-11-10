@@ -6,27 +6,39 @@ from __future__ import print_function
 
 from tensorflow import keras
 from tensorflow.keras.layers import *
-
-import numpy as np
-import tensorflow as tf
-import globals as _g
 from tensorflow.keras import backend as K
 
+import globals as _g
+
+_g.set_seed()
+
+# define some constant initializer and regularizer
 const_init = keras.initializers.constant(0)
 xavier = keras.initializers.glorot_normal(seed=_g.SEED)
-l2_reg = keras.regularizers.l2(0.004)
+l2_reg = keras.regularizers.l2(0.008)
 
 
 def _cnn1(input_shape):
+    """
+    this is the CNN1 Network in paper
+    :param input_shape: a image's shape, not the shape of a batch of image
+    :return: a model object
+    """
+
     inputs = keras.Input(shape=input_shape, name='inputs')
-    # this two lines didn't omit any parameter for showing how to define conv and pool layer
-    conv1 = Conv2D(filters=96, kernel_size=(11, 11), strides=(4, 4), padding='valid', activation='relu',
-                   use_bias=True, kernel_initializer=xavier, name='conv1')(inputs)
-    pool1 = MaxPool2D(pool_size=(3, 3), strides=(2, 2), padding='valid', name='pool1')(conv1)
+
+    # this two layers don't omit any parameter for showing how to define conv and pool layer
+    conv1 = Conv2D(filters=96, kernel_size=(11, 11), strides=(4, 4),
+                   padding='valid', activation='relu', use_bias=True,
+                   kernel_initializer=xavier, name='conv1')(inputs)
+    pool1 = MaxPool2D(pool_size=(3, 3), strides=(2, 2), padding='valid',
+                      name='pool1')(conv1)
+
     # we omit some default parameters
     conv2 = Conv2D(256, (5, 5), padding='same', activation='relu',
                    kernel_initializer=xavier, name='conv2')(pool1)
     pool2 = MaxPool2D((3, 3), (2, 2), name='pool2')(conv2)
+
     conv3 = Conv2D(384, (3, 3), padding='same', activation='relu',
                    kernel_initializer=xavier, name='conv3')(pool2)
     conv4 = Conv2D(384, (3, 3), padding='same', activation='relu',
@@ -43,6 +55,11 @@ def _cnn1(input_shape):
 
 
 def _split_inputs(inputs):
+    """
+    split inputs to NUM_VIEW input
+    :param inputs: a Input with shape VIEWS_IMAGE_SHAPE
+    :return: a list of inputs which shape is IMAGE_SHAPE
+    """
     slices = []
     for i in range(0, _g.NUM_VIEWS):
         slices.append(inputs[:, i, :, :, :])
@@ -50,6 +67,10 @@ def _split_inputs(inputs):
 
 
 def _view_pool(views):
+    """
+    this is the ViewPooling in the paper
+    :param views: the NUM_VIEWS outputs of CNN1
+    """
     expanded = [K.expand_dims(view, 0) for view in views]
     concated = K.concatenate(expanded, 0)
     reduced = K.max(concated, 0)
@@ -57,31 +78,44 @@ def _view_pool(views):
 
 
 def inference_multi_view():
-
+    """
+    the Multi-View CNN in the paper
+    :return: a keras model object
+    """
+    # input placeholder with shape (None, 12, 227, 227, 3)
+    # 'None'=batch size; 12=NUM_VIEWS; (227, 227, 3)=IMAGE_SHAPE
     inputs = Input(shape=_g.VIEWS_IMAGE_SHAPE, name='input')
+
+    # split inputs into views(a list), every element of
+    # view has shape (None, 227, 227, 3).
     views = Lambda(_split_inputs, name='split')(inputs)
 
-    view_pool = []
+    # define a CNN1 model object
     cnn1_model = _cnn1(_g.IMAGE_SHAPE)
+
+    view_pool = []
     # every view share the same cnn1_model(share the weights)
     for view in views:
         view_pool.append(cnn1_model(view))
 
-    # view_pool
-    # pool5_vp = vp.ViewPool(name='pool5_vp')(view_pool)
+    # view pool layer
     pool5_vp = Lambda(_view_pool, name='view_pool')(view_pool)
 
     # cnn2 from here
-    fc6 = Dense(units=4096, activation='relu', kernel_regularizer=l2_reg, name='fc6')(pool5_vp)
+    # a full-connected layer
+    fc6 = Dense(units=4096, activation='relu',
+                kernel_regularizer=l2_reg, name='fc6')(pool5_vp)
+    # a dropout layer, when call function evaluate and predict,
+    # dropout layer will disabled automatically
     dropout6 = Dropout(0.5, name='dropout6')(fc6)
+
     fc7 = Dense(4096, 'relu', kernel_regularizer=l2_reg, name='fc7')(dropout6)
     dropout7 = Dropout(0.5, name='dropout7')(fc7)
+
     fc8 = Dense(_g.NUM_CLASSES, 'softmax', kernel_regularizer=l2_reg, name='fc8')(dropout7)
 
-    # softmax = Softmax(name='softmax')(fc8)
-
-    model = keras.Model(inputs=inputs, outputs=fc8, name='MVCNN')
-    return model
+    mvcnn_model = keras.Model(inputs=inputs, outputs=fc8, name='MVCNN')
+    return mvcnn_model
 
 
 if __name__ == '__main__':

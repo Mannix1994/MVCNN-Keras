@@ -11,33 +11,45 @@ import model
 import inputs
 import pynvml
 
+_g.set_seed()
+
 
 def get_gpu_count():
+    """
+    return the gpu number
+    """
     pynvml.nvmlInit()
-    gpu_num = pynvml.nvmlDeviceGetCount()
+    gpu_number = pynvml.nvmlDeviceGetCount()
     pynvml.nvmlShutdown()
-    return gpu_num
+    return gpu_number
 
 
 if __name__ == '__main__':
+    train_with_multi_gpu = True
+
     gpu_num = get_gpu_count()
 
-    train_dataset = inputs.prepare_dataset(_g.TRAIN_LIST)
-    val_dataset = inputs.prepare_dataset(_g.VAL_LIST)
+    # define train and validate dataset
+    train_dataset, train_steps = inputs.prepare_dataset(_g.TRAIN_LIST)
+    val_dataset, val_steps = inputs.prepare_dataset(_g.VAL_LIST)
 
-    train_with_multi_gpu = True
+    # define a MVCNN model
     model = model.inference_multi_view()
 
     if train_with_multi_gpu:
+        # use the multi_gpu_model to train model with multi gpu
         model = keras.utils.multi_gpu_model(model, gpu_num)
 
+    # compile model. this is a multi-classification problem, so
+    # the loss should be categorical_crossentropy.
     model.compile(optimizer=keras.optimizers.Adam(lr=0.001, decay=1e-6),
                   loss=keras.losses.categorical_crossentropy,
                   metrics=[keras.metrics.categorical_accuracy])
 
-    model.fit(train_dataset, epochs=100, steps_per_epoch=100,
-              validation_data=val_dataset, validation_steps=32)
+    # start training model
+    model.fit(train_dataset, epochs=_g.NUM_TRAIN_EPOCH, steps_per_epoch=train_steps,
+              validation_data=val_dataset, validation_steps=val_steps)
 
+    # save model and wights
     model.save('model/latest.model.h5')
-
 

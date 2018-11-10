@@ -1,0 +1,14 @@
+0
+12
+data/airplane/train/airplane_0001_001.jpg
+data/airplane/train/airplane_0001_002.jpg
+data/airplane/train/airplane_0001_003.jpg
+data/airplane/train/airplane_0001_004.jpg
+data/airplane/train/airplane_0001_005.jpg
+data/airplane/train/airplane_0001_006.jpg
+data/airplane/train/airplane_0001_007.jpg
+data/airplane/train/airplane_0001_008.jpg
+data/airplane/train/airplane_0001_009.jpg
+data/airplane/train/airplane_0001_010.jpg
+data/airplane/train/airplane_0001_011.jpg
+data/airplane/train/airplane_0001_012.jpg
