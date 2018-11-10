@@ -10,7 +10,6 @@ from tensorflow.keras.layers import *
 import numpy as np
 import tensorflow as tf
 import globals as _g
-import vp
 from tensorflow.keras import backend as K
 
 const_init = keras.initializers.constant(0)
@@ -90,13 +89,16 @@ if __name__ == '__main__':
     if mode == 1:
         # print cnn1's info
         cnn1_model = _cnn1(_g.IMAGE_SHAPE)
+        keras.utils.plot_model(cnn1_model, to_file='model/cnn1_model.png', show_shapes=True)
         cnn1_model.summary()
     elif mode == 2:
         # print entire model's info
         model = inference_multi_view()
+        keras.utils.plot_model(model, to_file='model/model.png', show_shapes=True)
         model.summary()
         model.save('mvcnn.model.h5')
     else:
         # load and print model info
         model = keras.models.load_model('mvcnn.model.h5')
         model.summary()
+
