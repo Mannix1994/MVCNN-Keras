@@ -8,10 +8,8 @@ import random
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras import backend as K
 
 import globals as _g
-import model
 import cv2
 
 
@@ -42,7 +40,8 @@ def prepare_dataset(name=''):
             yield view, label
 
     dataset = tf.data.Dataset.from_generator(generator, output_types=(tf.float32, tf.int32))
-    dataset = dataset.shuffle(_g.TRAIN_BATCH_SIZE, _g.SEED)
+    dataset = dataset.batch(_g.TRAIN_BATCH_SIZE)
+    # dataset.map(parse, num_parallel_calls=16)
     dataset = dataset.repeat()
     return dataset
 
@@ -63,3 +62,4 @@ def test_inputs():
 
 if __name__ == '__main__':
     test_inputs()
+

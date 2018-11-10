@@ -4,17 +4,11 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import random
-import numpy as np
-import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras import backend as K
 
 import globals as _g
 import model
-import cv2
 import inputs
-# tf.enable_eager_execution()
 
 
 if __name__ == '__main__':
