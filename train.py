@@ -25,10 +25,11 @@ if __name__ == '__main__':
     if train_with_multi_gpu:
         model = keras.utils.multi_gpu_model(model, 2)
 
-    model.compile(optimizer=keras.optimizers.Adam(lr=0.01, decay=1e-6),
+    model.compile(optimizer=keras.optimizers.Adam(lr=0.001, decay=1e-6),
                   loss=keras.losses.categorical_crossentropy,
                   metrics=[keras.metrics.categorical_accuracy])
 
     model.fit(train_dataset, epochs=100, steps_per_epoch=100,
               validation_data=val_dataset, validation_steps=32)
 
+    model.save('model/latest.model.h5')
