@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import multiprocessing as mt
 import random
 
 import cv2
@@ -33,7 +34,7 @@ def prepare_dataset(name=''):
     one_shot_labels.astype(dtype=np.int32)
 
     dataset = tf.data.Dataset.from_tensor_slices((tf.constant(list_files), tf.constant(one_shot_labels)))
-    dataset = dataset.map(parse_image, num_parallel_calls=16)
+    dataset = dataset.map(parse_image, num_parallel_calls=mt.cpu_count())
     dataset = dataset.batch(_g.TRAIN_BATCH_SIZE)
     dataset = dataset.repeat()
     return dataset
