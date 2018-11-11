@@ -52,7 +52,7 @@ if __name__ == '__main__':
         # write TensorBoard' logs to directory 'logs'
         keras.callbacks.TensorBoard(log_dir='./logs'),
         # EarlyStopping for prevent overfitting
-        keras.callbacks.EarlyStopping(monitor='val_loss', patience=20, verbose=2)
+        keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, verbose=2)
     ]
 
     # start training model
