@@ -15,7 +15,7 @@ _g.set_seed()
 # define some constant initializer and regularizer
 const_init = keras.initializers.constant(0)
 xavier = keras.initializers.glorot_normal()
-l2_reg = keras.regularizers.l2(0.008)
+l2_reg = keras.regularizers.l2(0.004)
 
 
 def _cnn1(input_shape):

@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
     # compile model. this is a multi-classification problem, so
     # the loss should be categorical_crossentropy.
-    model.compile(optimizer=keras.optimizers.Adam(lr=0.001, decay=1e-6),
+    model.compile(optimizer=keras.optimizers.Adam(lr=0.001, decay=1e-5),
                   loss=keras.losses.categorical_crossentropy,
                   metrics=[keras.metrics.categorical_accuracy])
 
@@ -52,7 +52,7 @@ if __name__ == '__main__':
         # write TensorBoard' logs to directory 'logs'
         keras.callbacks.TensorBoard(log_dir='./logs'),
         # EarlyStopping for prevent overfitting
-        keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, verbose=2)
+        keras.callbacks.EarlyStopping(monitor='val_loss', patience=20, verbose=2)
     ]
 
     # start training model
