@@ -53,7 +53,11 @@ def _read_py_function(filename, label):
     :return: a 'View' and label
     """
     image_lists = np.loadtxt(filename.decode(), dtype=str, skiprows=2)
-    assert len(image_lists) == _g.NUM_VIEWS
+    # get NUM_VIEWS image
+    image_lists = image_lists[:_g.NUM_VIEWS]
+    # raise error
+    if len(image_lists) != _g.NUM_VIEWS:
+        raise ValueError('There haven\'t %d views in %s ' % (len(image_lists), filename))
     # read images
     images = [cv2.imread(image_name, cv2.IMREAD_UNCHANGED).astype(np.float32) for image_name in image_lists]
     # resize image to shape IMAGE_SHAPE
