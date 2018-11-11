@@ -8,8 +8,9 @@ import cv2
 import numpy as np
 import tensorflow as tf
 import multiprocessing as mt
-import globals as _g
 from tensorflow import keras
+
+import globals as _g
 
 _g.set_seed()
 

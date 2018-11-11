@@ -14,7 +14,7 @@ _g.set_seed()
 
 # define some constant initializer and regularizer
 const_init = keras.initializers.constant(0)
-xavier = keras.initializers.glorot_normal(seed=_g.SEED)
+xavier = keras.initializers.glorot_normal()
 l2_reg = keras.regularizers.l2(0.008)
 
 
@@ -107,10 +107,10 @@ def inference_multi_view():
                 kernel_regularizer=l2_reg, name='fc6')(pool5_vp)
     # a dropout layer, when call function evaluate and predict,
     # dropout layer will disabled automatically
-    dropout6 = Dropout(0.5, name='dropout6')(fc6)
+    dropout6 = Dropout(0.6, name='dropout6')(fc6)
 
     fc7 = Dense(4096, 'relu', kernel_regularizer=l2_reg, name='fc7')(dropout6)
-    dropout7 = Dropout(0.5, name='dropout7')(fc7)
+    dropout7 = Dropout(0.6, name='dropout7')(fc7)
 
     fc8 = Dense(_g.NUM_CLASSES, 'softmax', kernel_regularizer=l2_reg, name='fc8')(dropout7)
 

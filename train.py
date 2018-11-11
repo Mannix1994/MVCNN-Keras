@@ -6,10 +6,11 @@ from __future__ import print_function
 
 from tensorflow import keras
 
-import globals as _g
 import model
 import inputs
 import pynvml
+
+import globals as _g
 
 _g.set_seed()
 
@@ -46,9 +47,17 @@ if __name__ == '__main__':
                   loss=keras.losses.categorical_crossentropy,
                   metrics=[keras.metrics.categorical_accuracy])
 
+    # set callbacks
+    callbacks = [
+        # write TensorBoard' logs to directory 'logs'
+        keras.callbacks.TensorBoard(log_dir='./logs'),
+        # EarlyStopping for prevent overfitting
+        keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, verbose=2)
+    ]
+
     # start training model
     model.fit(train_dataset, epochs=_g.NUM_TRAIN_EPOCH, steps_per_epoch=train_steps,
-              validation_data=val_dataset, validation_steps=val_steps)
+              validation_data=val_dataset, validation_steps=val_steps, callbacks=callbacks)
 
     # save model and wights
     model.save('model/latest.model.h5')

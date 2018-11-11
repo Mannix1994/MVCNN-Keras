@@ -5,6 +5,7 @@ from __future__ import division
 from __future__ import print_function
 
 import os
+import random
 import numpy as np
 import tensorflow as tf
 
@@ -40,3 +41,4 @@ def set_seed():
     os.environ['PYTHONHASHSEED'] = str(SEED)
     np.random.seed(seed=SEED)
     tf.set_random_seed(seed=SEED)
+    random.seed(SEED)
