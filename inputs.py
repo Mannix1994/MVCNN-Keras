@@ -57,7 +57,7 @@ def _read_py_function(filename, label):
     image_lists = image_lists[:_g.NUM_VIEWS]
     # raise error
     if len(image_lists) != _g.NUM_VIEWS:
-        raise ValueError('There haven\'t %d views in %s ' % (len(image_lists), filename))
+        raise ValueError('There haven\'t %d views in %s ' % (len(_g.NUM_VIEWS), filename))
     # read images
     images = [cv2.imread(image_name, cv2.IMREAD_UNCHANGED).astype(np.float32) for image_name in image_lists]
     # resize image to shape IMAGE_SHAPE
