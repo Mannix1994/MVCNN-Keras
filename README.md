@@ -1,8 +1,7 @@
 # HI
 
 this is the MVCNN model coding with keras.  
-Inspired by WeiTang114's project [MVCNN-TensorFlow]
-(https://github.com/WeiTang114/MVCNN-TensorFlow).
+Inspired by WeiTang114's project [MVCNN-TensorFlow](https://github.com/WeiTang114/MVCNN-TensorFlow).
 
 # Requirements
 * CUDA 9.0 (if you have NVIDIA GPU)
