@@ -60,5 +60,5 @@ if __name__ == '__main__':
               validation_data=val_dataset, validation_steps=val_steps, callbacks=callbacks)
 
     # save model and wights
-    model.save('model/latest.model.h5')
+    model.save_weights('model/latest.model.h5', save_format='h5')
 

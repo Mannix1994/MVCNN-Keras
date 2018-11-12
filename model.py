@@ -112,9 +112,11 @@ def inference_multi_view():
     fc7 = Dense(4096, 'relu', kernel_regularizer=l2_reg, name='fc7')(dropout6)
     dropout7 = Dropout(0.6, name='dropout7')(fc7)
 
-    fc8 = Dense(_g.NUM_CLASSES, 'softmax', kernel_regularizer=l2_reg, name='fc8')(dropout7)
+    fc8 = Dense(_g.NUM_CLASSES, kernel_regularizer=l2_reg, name='fc8')(dropout7)
 
-    mvcnn_model = keras.Model(inputs=inputs, outputs=fc8, name='MVCNN')
+    softmax = Softmax(name='softmax')(fc8)
+
+    mvcnn_model = keras.Model(inputs=inputs, outputs=softmax, name='MVCNN')
     return mvcnn_model
 
 

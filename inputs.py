@@ -43,7 +43,7 @@ def prepare_dataset(path=''):
     return dataset, steps_per_epoch
 
 
-def _read_py_function(filename, label):
+def read_and_process_image(filename, label):
     """
     read all NUM_VIEWS image(shape: (227, 227, 3)) file belong to one object
     and concat the to a 'View'(shape: (NUM_VIEWS, 227, 227, 3)). the shape of
@@ -73,7 +73,7 @@ def _read_py_function(filename, label):
 
 
 def parse_image(filename, label):
-    return tf.py_func(_read_py_function, [filename, label], [tf.float32, label.dtype])
+    return tf.py_func(read_and_process_image, [filename, label], [tf.float32, label.dtype])
 
 
 def test_inputs():
