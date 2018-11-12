@@ -5,8 +5,8 @@ from __future__ import division
 from __future__ import print_function
 
 import inputs
+import model as m
 import numpy as np
-import tensorflow as tf
 import globals as _g
 
 _g.set_seed()
@@ -19,7 +19,9 @@ if __name__ == '__main__':
     view = view[np.newaxis, :]
     print(view.shape)
     # get model
-    model = tf.keras.models.load_model('model/latest.model.h5')
+    model = m.inference_multi_view()
+    # load_weights
+    model.load_weights('model/latest.weights.h5', by_name=True)
     # predict
     softmax = model.predict(view, 1)
     print(np.argmax(softmax))

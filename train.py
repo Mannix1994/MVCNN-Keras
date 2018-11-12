@@ -43,6 +43,7 @@ if __name__ == '__main__':
     # define a MVCNN model
     model = model.inference_multi_view()
 
+    origin_model = model
     if train_with_multi_gpu:
         # use the multi_gpu_model to train model with multi gpu
         print('Using GPU to train model')
@@ -67,4 +68,4 @@ if __name__ == '__main__':
               validation_data=val_dataset, validation_steps=val_steps, callbacks=callbacks)
 
     # save model's wights
-    model.save('model/latest.model.h5')
+    origin_model.save_weights('model/latest.weights.h5', save_format='h5')
