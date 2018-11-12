@@ -18,7 +18,7 @@ if __name__ == '__main__':
     # get model
     model = m.inference_multi_view()
     # load_weights
-    model.load_weights('model/latest.weights.h5', by_name=True)
+    model.load_weights('model/latest.weights.h5')
 
     model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.001, decay=1e-5),
                   loss=tf.keras.losses.categorical_crossentropy,

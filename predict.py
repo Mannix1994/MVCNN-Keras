@@ -21,7 +21,7 @@ if __name__ == '__main__':
     # get model
     model = m.inference_multi_view()
     # load_weights
-    model.load_weights('model/latest.weights.h5', by_name=True)
+    model.load_weights('model/latest.weights.h5')
     # predict
     softmax = model.predict(view, 1)
     print(np.argmax(softmax))
