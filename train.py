@@ -9,6 +9,7 @@ from tensorflow import keras
 import model
 import inputs
 import pynvml
+import argparse
 
 import globals as _g
 
@@ -26,7 +27,12 @@ def get_gpu_count():
 
 
 if __name__ == '__main__':
-    train_with_multi_gpu = True
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-u', '--use-multi-gpu', action='store_true',
+                        help='Using CUDA-enabled device to accelerate training model')
+    arg, _ = parser.parse_known_args()
+
+    train_with_multi_gpu = arg.use_multi_gpu
 
     gpu_num = get_gpu_count()
 
@@ -39,6 +45,7 @@ if __name__ == '__main__':
 
     if train_with_multi_gpu:
         # use the multi_gpu_model to train model with multi gpu
+        print('Using GPU to train model')
         model = keras.utils.multi_gpu_model(model, gpu_num)
 
     # compile model. this is a multi-classification problem, so
@@ -59,6 +66,5 @@ if __name__ == '__main__':
     model.fit(train_dataset, epochs=_g.NUM_TRAIN_EPOCH, steps_per_epoch=train_steps,
               validation_data=val_dataset, validation_steps=val_steps, callbacks=callbacks)
 
-    # save model and wights
-    model.save_weights('model/latest.model.h5', save_format='h5')
-
+    # save model's wights
+    model.save('model/latest.model.h5')

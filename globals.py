@@ -31,6 +31,9 @@ TRAIN_LIST = './data/train_lists.txt'
 
 VAL_LIST = './data/val_lists.txt'
 
+# because I haven't test data, so I use validation data to for demo
+TEST_LIST = VAL_LIST
+
 # --------------------------------------------------------------
 
 
