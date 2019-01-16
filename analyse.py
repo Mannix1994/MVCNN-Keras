@@ -11,8 +11,10 @@ import config as _g
 import tensorflow.keras.backend as K
 _g.set_seed()
 import matplotlib.pyplot as plt
+from PIL import Image
+import os
 
-if __name__ == '__main__':
+def feature_image(path='data/M-PIE/train.txt'):
     # get model
     cnn1, model = m.inference_multi_view()
     # load_weights
@@ -23,7 +25,7 @@ if __name__ == '__main__':
     # print(np.argmax(softmax))
 
     # load analyse dataset
-    ana_dataset, ana_steps = inputs.prepare_dataset('data/M-PIE/train.txt', shuffle=False)
+    ana_dataset, ana_steps = inputs.prepare_dataset(path, shuffle=False)
 
     print('shapes:', ana_dataset.output_shapes)
     print('types:', ana_dataset.output_types)
@@ -62,3 +64,29 @@ if __name__ == '__main__':
     plt.tight_layout()
     plt.savefig('test/after_view_pool_%d.png')
     plt.clf()
+
+
+def read_face(path):
+    # read image list files name and labels
+    lists_and_labels = np.loadtxt(path, dtype=str).tolist()
+    # split lists an labels
+    list_files, labels = zip(*[(l[0], int(l[1])) for l in lists_and_labels])
+    for idx, lf in enumerate(list_files):
+        image_lists = np.loadtxt(lf, dtype=str, skiprows=2)
+        # get NUM_VIEWS image
+        image_lists = image_lists[:_g.NUM_VIEWS]
+        print(len(image_lists))
+        # draw image
+        plt.figure(idx)
+        for index, v in enumerate(image_lists):
+            img = Image.open(v)
+            plt.subplot(4, 3, index + 1)
+            plt.imshow(img)
+        plt.tight_layout()
+        plt.savefig('test/src_%d.png' % idx)
+        plt.clf()
+        plt.close()
+
+
+if __name__ == '__main__':
+    read_face('data/M-PIE/train.txt')
