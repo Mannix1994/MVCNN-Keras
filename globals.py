@@ -27,9 +27,9 @@ NUM_TRAIN_EPOCH = 100
 
 TRAIN_BATCH_SIZE = 32
 
-TRAIN_LIST = './data/train_lists.txt'
+TRAIN_LIST = 'data/modelnet40v1/train.txt'
 
-VAL_LIST = './data/val_lists.txt'
+VAL_LIST = 'data/modelnet40v1/test.txt'
 
 # because I haven't test data, so I use validation data to for demo
 TEST_LIST = VAL_LIST

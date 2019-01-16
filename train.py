@@ -42,6 +42,7 @@ if __name__ == '__main__':
 
     # define a MVCNN model
     model = model.inference_multi_view()
+    model.summary()
 
     origin_model = model
     if train_with_multi_gpu:
@@ -51,7 +52,7 @@ if __name__ == '__main__':
 
     # compile model. this is a multi-classification problem, so
     # the loss should be categorical_crossentropy.
-    model.compile(optimizer=keras.optimizers.Adam(lr=0.001, decay=1e-5),
+    model.compile(optimizer=keras.optimizers.Adam(lr=0.0001, decay=1e-5),
                   loss=keras.losses.categorical_crossentropy,
                   metrics=[keras.metrics.categorical_accuracy])
 

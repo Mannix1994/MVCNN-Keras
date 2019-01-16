@@ -5,8 +5,8 @@ from __future__ import division
 from __future__ import print_function
 
 from tensorflow import keras
-from tensorflow.keras.layers import *
-from tensorflow.keras import backend as K
+from tensorflow.python.keras.layers import *
+from tensorflow.python.keras import backend as K
 
 import globals as _g
 

@@ -73,7 +73,11 @@ def read_and_process_image(filename, label):
 
 
 def parse_image(filename, label):
-    return tf.py_func(read_and_process_image, [filename, label], [tf.float32, label.dtype])
+    view, label = tf.py_func(read_and_process_image, [filename, label], [tf.float32, label.dtype])
+    # MUST SET SHAPE
+    view.set_shape(_g.VIEWS_IMAGE_SHAPE)
+    label.set_shape((_g.NUM_CLASSES,))
+    return view, label
 
 
 def test_inputs():
@@ -88,7 +92,7 @@ def test_inputs():
     next_data = data_it.get_next()
 
     with tf.Session() as sess:
-        for i in range(10):
+        for i in range(26):
             data, label = sess.run(next_data)
             print(len(data), len(label), data.shape, np.min(data), np.max(data))
 
