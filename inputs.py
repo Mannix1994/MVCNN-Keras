@@ -15,7 +15,7 @@ import config as _g
 _g.set_seed()
 
 
-def prepare_dataset(path=''):
+def prepare_dataset(path='', shuffle=True):
     """
     prepaer dataset using tf.data.Dataset
     :param path: the list file like data/train_lists_demo.txt
@@ -24,8 +24,9 @@ def prepare_dataset(path=''):
     """
     # read image list files name and labels
     lists_and_labels = np.loadtxt(path, dtype=str).tolist()
-    # shuffle dataset
-    np.random.shuffle(lists_and_labels)
+    if shuffle:
+        # shuffle dataset
+        np.random.shuffle(lists_and_labels)
     # split lists an labels
     list_files, labels = zip(*[(l[0], int(l[1])) for l in lists_and_labels])
     # one_shot encoding on labels
