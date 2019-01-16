@@ -10,7 +10,7 @@ import tensorflow as tf
 import multiprocessing as mt
 from tensorflow import keras
 
-import globals as _g
+import config as _g
 
 _g.set_seed()
 

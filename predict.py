@@ -7,7 +7,7 @@ from __future__ import print_function
 import inputs
 import model as m
 import numpy as np
-import globals as _g
+import config as _g
 
 _g.set_seed()
 

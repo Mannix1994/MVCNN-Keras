@@ -8,7 +8,7 @@ from tensorflow import keras
 from tensorflow.python.keras.layers import *
 from tensorflow.python.keras import backend as K
 
-import globals as _g
+import config as _g
 
 _g.set_seed()
 
