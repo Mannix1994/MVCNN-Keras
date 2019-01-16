@@ -16,7 +16,7 @@ if __name__ == '__main__':
     # prepare test dataset
     test_dataset, test_steps = inputs.prepare_dataset(_g.TEST_LIST)
     # get model
-    model = m.inference_multi_view()
+    _, model = m.inference_multi_view()
     # load_weights
     model.load_weights('model/latest.weights.h5')
 

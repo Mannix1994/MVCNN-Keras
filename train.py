@@ -41,8 +41,9 @@ if __name__ == '__main__':
     val_dataset, val_steps = inputs.prepare_dataset(_g.VAL_LIST)
 
     # define a MVCNN model
-    model = model.inference_multi_view()
+    cnn1, model = model.inference_multi_view()
     model.summary()
+    model.load_weights('model/latest.weights.h5')
 
     origin_model = model
     if train_with_multi_gpu:
@@ -65,8 +66,9 @@ if __name__ == '__main__':
     ]
 
     # start training model
-    model.fit(train_dataset, epochs=_g.NUM_TRAIN_EPOCH, steps_per_epoch=train_steps,
+    model.fit(train_dataset, epochs=1, steps_per_epoch=train_steps,
               validation_data=val_dataset, validation_steps=val_steps, callbacks=callbacks)
 
     # save model's wights
-    origin_model.save_weights('model/latest.weights.h5', save_format='h5')
+    cnn1.save_weights('model/cnn1.latest.weights.h5', save_format='h5')
+    origin_model.save_weights('model/mvcnn.latest.weights.h5', save_format='h5')

@@ -19,9 +19,10 @@ if __name__ == '__main__':
     view = view[np.newaxis, :]
     print(view.shape)
     # get model
-    _, model = m.inference_multi_view()
+    cnn1, model = m.inference_multi_view()
     # load_weights
-    model.load_weights('model/latest.weights.h5')
+    cnn1.load_weights('model/cnn1.latest.weights.h5')
+    model.load_weights('model/mvcnn.latest.weights.h5')
     # predict
     softmax = model.predict(view, 1)
     print(np.argmax(softmax))
