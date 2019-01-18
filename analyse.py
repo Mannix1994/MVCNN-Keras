@@ -33,13 +33,13 @@ def feature_image(path='data/M-PIE/train.txt'):
     sess = K.get_session()
 
     # store default mvcnn predicts
-    mvcnn_predicts = []
+    fc8_predicts = []
     for i in range(ana_steps):
         # get a batch of data
         views, label = sess.run(data_it)
         print(len(views), len(label), views.shape, np.min(views), np.max(views))
         # compute mvcnn's predicts
-        mvcnn_predicts.append(fc8.predict(views))
+        fc8_predicts.append(fc8.predict(views))
 
         # for every view of views
         for idx, view in enumerate(views):
@@ -48,25 +48,31 @@ def feature_image(path='data/M-PIE/train.txt'):
             print(cnn1_predicts.shape)
             # store the value's figure
             plt.figure(2)
+            v_max = np.max(cnn1_predicts)
+            v_min = np.min(cnn1_predicts)
             for index, v in enumerate(cnn1_predicts):
                 x = np.linspace(1, v.size, v.size)
                 plt.subplot(4, 3, index+1)
-                plt.plot(x, v.reshape(-1), marker='.', lw=0.1)
+                plt.ylim((v_min, v_max))
+                plt.plot(x, v.reshape(-1), lw=0.1)
             plt.tight_layout()
             plt.savefig('test/before_view_pool_%d_%d.png' % (i, idx))
             plt.clf()
             plt.close()
 
     # concat all fc8_predicts
-    mvcnn_predicts = np.concatenate(mvcnn_predicts, axis=0)
+    fc8_predicts = np.concatenate(fc8_predicts, axis=0)
     # draw a picture of predicts
-    print(mvcnn_predicts.shape)
-    data_size = len(mvcnn_predicts)
-    for idx, mvcnn_predict in enumerate(mvcnn_predicts):
+    print(fc8_predicts.shape)
+    data_size = len(fc8_predicts)
+    v_max = np.max(fc8_predicts)
+    v_min = np.min(fc8_predicts)
+    for idx, fc8_predict in enumerate(fc8_predicts):
         plt.figure(1, [9, 2 * (data_size // 3 + 1)])
-        x = np.linspace(1, mvcnn_predict.size, mvcnn_predict.size)
+        x = np.linspace(1, fc8_predict.size, fc8_predict.size)
         plt.subplot(data_size // 3 + 1, 3, idx+1)
-        plt.plot(x, mvcnn_predict.reshape(-1), marker='.')
+        plt.ylim((v_min, v_max))
+        plt.plot(x, fc8_predict.reshape(-1))
 
     plt.tight_layout()
     plt.savefig('test/after_view_pool_%d.png')
@@ -84,7 +90,7 @@ def read_face(path):
         image_lists = image_lists[:_g.NUM_VIEWS]
         print(len(image_lists))
         # draw image
-        plt.figure(idx)
+        plt.figure(1)
         for index, v in enumerate(image_lists):
             img = Image.open(v)
             plt.subplot(4, 3, index + 1)
@@ -97,4 +103,4 @@ def read_face(path):
 
 if __name__ == '__main__':
     feature_image()
-    read_face('data/M-PIE/train.txt')
+    # read_face('data/M-PIE/train.txt')
