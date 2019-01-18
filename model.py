@@ -116,8 +116,9 @@ def inference_multi_view():
 
     softmax = Softmax(name='softmax')(fc8)
 
+    fc8_model = keras.Model(inputs=inputs, outputs=fc8, name='FC8_Model')
     mvcnn_model = keras.Model(inputs=inputs, outputs=softmax, name='MVCNN')
-    return cnn1_model, mvcnn_model
+    return cnn1_model, fc8_model, mvcnn_model
 
 
 if __name__ == '__main__':
@@ -129,7 +130,7 @@ if __name__ == '__main__':
         cnn1_model.summary()
     elif mode == 2:
         # print entire model's info
-        _, model = inference_multi_view()
+        cnn1, fc8, model = inference_multi_view()
         keras.utils.plot_model(model, to_file='model/model.png', show_shapes=True)
         model.summary()
         model.save('mvcnn.model.h5')

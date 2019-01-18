@@ -19,7 +19,7 @@ if __name__ == '__main__':
     view = view[np.newaxis, :]
     print(view.shape)
     # get model
-    _, model = m.inference_multi_view()
+    _, _, model = m.inference_multi_view()
     # load_weights
     model.load_weights('model/latest.weights.h5')
     # predict

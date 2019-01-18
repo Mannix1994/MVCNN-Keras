@@ -41,7 +41,7 @@ if __name__ == '__main__':
     val_dataset, val_steps = inputs.prepare_dataset(_g.VAL_LIST)
 
     # define a MVCNN model
-    cnn1, model = model.inference_multi_view()
+    cnn1, _, model = model.inference_multi_view()
     model.summary()
     model.load_weights('model/latest.weights.h5')
 
