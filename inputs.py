@@ -18,6 +18,7 @@ _g.set_seed()
 def prepare_dataset(path='', shuffle=True):
     """
     prepaer dataset using tf.data.Dataset
+    :param shuffle: shuffle the dataset
     :param path: the list file like data/train_lists_demo.txt
     and data/val_lists_demo.txt
     :return: a Dataset object
